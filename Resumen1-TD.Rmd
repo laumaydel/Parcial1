@@ -28,39 +28,37 @@ source("teoriadecision_funciones_incertidumbre.R")
 
 ## Crear tabla de deción
 
-Vemos un ejemplo con 4 estados de la naturaleza y 5 alternativas.
+Vemos un ejemplo con 3 estados de la naturaleza y 4 alternativas.
 
 ```{r,eval=FALSE}
-tabla=cbind(tabla <- data.frame(
-  e1 = c(4,5,-3,7,8),
-  e2 = c(5,-1,3,7,2),
-  e3 = c(-4,9,8,2,1),
-  e4 = c(4,6,7,-9,3)
-))
-row.names(tabla)=c("d1","d2","d3","d4","d5")
+e1=c(550,300,250,450) #valores de cada alternativa en el estado 1
+e2=c(600,250,350,400)
+e3=c(550,400,250,450)
+tabla=crea.tablaX(c(e1,e2,e3),4,3)
+row.names(tabla)=c("d1","d2","d3","d4")
 ```
 
 ## Criterio de Wald
-
+Se elige la opción que maximiza el peor resultado posible, es decir, la que minimiza el riesgo. Es un enfoque conservador.
 ```{r,eval=FALSE}
 Wald=criterio.Wald(tb01,favorable = TRUE)
 ```
 
-## Criterio Optimista
-
+## Criterio Optimista (Maximax)
+Se selecciona la opción con el mejor resultado posible, es decir, la que maximiza el mejor resultado. Es el criterio del "mejor de los casos".
 ```{r,eval=FALSE}
 Optimista=criterio.Optimista(tb01,favorable = TRUE)
 ```
 
 ## Criterio de Hurwitcz
-
+Este criterio es un compromiso entre los enfoques pesimista y optimista. Se usa un coeficiente de optimismo para ponderar los mejores y peores resultados de cada opción.
 ```{r,eval=FALSE}
 Hurwitcz=criterio.Hurwicz(tb01,favorable = TRUE)
 dibuja.criterio.Hurwicz(tb01,favorable = TRUE)
 ```
 
-## Criterio de Savage
-
+## Criterio de Savage (Minimax)
+Aquí se trata de minimizar el "arrepentimiento", es decir, la diferencia entre lo que se podría haber ganado y lo que realmente se ganó. Se selecciona la opción que minimiza el máximo arrepentimiento. Laplace: Este criterio asume que todas las situaciones son equiprobables y se elige la opción con el mejor promedio de resultados.
 ```{r,eval=FALSE}
 Savage=criterio.Savage(tb01,favorable = TRUE)
 ```
@@ -72,7 +70,7 @@ LaPlace=criterio.Laplace(tb01,favorable = TRUE)
 ```
 
 ## Criterio del Punto Ideal
-
+Consiste en seleccionar la opción cuya distancia a un punto ideal (el mejor resultado posible en cada criterio) sea la mínima.
 ```{r,eval=FALSE}
 PuntoIdeal=criterio.PuntoIdeal(tb01,favorable = TRUE)
 ```

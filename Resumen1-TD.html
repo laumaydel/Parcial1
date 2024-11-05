@@ -362,11 +362,11 @@ INCERTIDUMBRE</a>
 <li><a href="#crear-tabla-de-deción" id="toc-crear-tabla-de-deción">Crear tabla de deción</a></li>
 <li><a href="#criterio-de-wald" id="toc-criterio-de-wald">Criterio de
 Wald</a></li>
-<li><a href="#criterio-optimista" id="toc-criterio-optimista">Criterio
-Optimista</a></li>
+<li><a href="#criterio-optimista-maximax" id="toc-criterio-optimista-maximax">Criterio Optimista
+(Maximax)</a></li>
 <li><a href="#criterio-de-hurwitcz" id="toc-criterio-de-hurwitcz">Criterio de Hurwitcz</a></li>
-<li><a href="#criterio-de-savage" id="toc-criterio-de-savage">Criterio
-de Savage</a></li>
+<li><a href="#criterio-de-savage-minimax" id="toc-criterio-de-savage-minimax">Criterio de Savage
+(Minimax)</a></li>
 <li><a href="#criterio-laplace" id="toc-criterio-laplace">Criterio
 Laplace</a></li>
 <li><a href="#criterio-del-punto-ideal" id="toc-criterio-del-punto-ideal">Criterio del Punto Ideal</a></li>
@@ -409,6 +409,7 @@ Windows</a></li>
 </ul>
 </div>
 
+<div style="page-break-after: always;"></div>
 <div id="decisión-ambiente-de-incertidumbre" class="section level1">
 <h1>DECISIÓN AMBIENTE DE INCERTIDUMBRE</h1>
 <p>Previamenta antes de ejecutar cualquiera de las funciones se debe
@@ -416,30 +417,41 @@ hacer llamar a los ficheros con las mismas, gracias al comando:</p>
 <pre class="r"><code>source(&quot;teoriadecision_funciones_incertidumbre.R&quot;)</code></pre>
 <div id="crear-tabla-de-deción" class="section level2">
 <h2>Crear tabla de deción</h2>
-<p>Vemos un ejemplo con 4 estados de la naturaleza y 5 alternativas.</p>
-<pre class="r"><code>tabla=cbind(tabla &lt;- data.frame(
-  e1 = c(4,5,-3,7,8),
-  e2 = c(5,-1,3,7,2),
-  e3 = c(-4,9,8,2,1),
-  e4 = c(4,6,7,-9,3)
-))
-row.names(tabla)=c(&quot;d1&quot;,&quot;d2&quot;,&quot;d3&quot;,&quot;d4&quot;,&quot;d5&quot;)</code></pre>
+<p>Vemos un ejemplo con 3 estados de la naturaleza y 4 alternativas.</p>
+<pre class="r"><code>e1=c(550,300,250,450) #valores de cada alternativa en el estado 1
+e2=c(600,250,350,400)
+e3=c(550,400,250,450)
+tabla=crea.tablaX(c(e1,e2,e3),4,3)
+row.names(tabla)=c(&quot;d1&quot;,&quot;d2&quot;,&quot;d3&quot;,&quot;d4&quot;)</code></pre>
 </div>
 <div id="criterio-de-wald" class="section level2">
 <h2>Criterio de Wald</h2>
+<p>Se elige la opción que maximiza el peor resultado posible, es decir,
+la que minimiza el riesgo. Es un enfoque conservador.</p>
 <pre class="r"><code>Wald=criterio.Wald(tb01,favorable = TRUE)</code></pre>
 </div>
-<div id="criterio-optimista" class="section level2">
-<h2>Criterio Optimista</h2>
+<div id="criterio-optimista-maximax" class="section level2">
+<h2>Criterio Optimista (Maximax)</h2>
+<p>Se selecciona la opción con el mejor resultado posible, es decir, la
+que maximiza el mejor resultado. Es el criterio del “mejor de los
+casos”.</p>
 <pre class="r"><code>Optimista=criterio.Optimista(tb01,favorable = TRUE)</code></pre>
 </div>
 <div id="criterio-de-hurwitcz" class="section level2">
 <h2>Criterio de Hurwitcz</h2>
+<p>Este criterio es un compromiso entre los enfoques pesimista y
+optimista. Se usa un coeficiente de optimismo para ponderar los mejores
+y peores resultados de cada opción.</p>
 <pre class="r"><code>Hurwitcz=criterio.Hurwicz(tb01,favorable = TRUE)
 dibuja.criterio.Hurwicz(tb01,favorable = TRUE)</code></pre>
 </div>
-<div id="criterio-de-savage" class="section level2">
-<h2>Criterio de Savage</h2>
+<div id="criterio-de-savage-minimax" class="section level2">
+<h2>Criterio de Savage (Minimax)</h2>
+<p>Aquí se trata de minimizar el “arrepentimiento”, es decir, la
+diferencia entre lo que se podría haber ganado y lo que realmente se
+ganó. Se selecciona la opción que minimiza el máximo arrepentimiento.
+Laplace: Este criterio asume que todas las situaciones son equiprobables
+y se elige la opción con el mejor promedio de resultados.</p>
 <pre class="r"><code>Savage=criterio.Savage(tb01,favorable = TRUE)</code></pre>
 </div>
 <div id="criterio-laplace" class="section level2">
@@ -448,6 +460,8 @@ dibuja.criterio.Hurwicz(tb01,favorable = TRUE)</code></pre>
 </div>
 <div id="criterio-del-punto-ideal" class="section level2">
 <h2>Criterio del Punto Ideal</h2>
+<p>Consiste en seleccionar la opción cuya distancia a un punto ideal (el
+mejor resultado posible en cada criterio) sea la mínima.</p>
 <pre class="r"><code>PuntoIdeal=criterio.PuntoIdeal(tb01,favorable = TRUE)</code></pre>
 </div>
 <div id="criterios-todos" class="section level2">
@@ -455,7 +469,8 @@ dibuja.criterio.Hurwicz(tb01,favorable = TRUE)</code></pre>
 <pre class="r"><code>Todos=criterio.Todos(tb01,favorable = T, alfa = 0.5)</code></pre>
 <p><strong>nota: Esto es siempre es desde el punto de vista favorable,
 en caso contrario, de estar en una matriz de costos cambiar el argumento
-<em>favorable=F</em></strong>*</p>
+<em>favorable=F</em></strong></p>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div id="decisiones-multicriterio" class="section level1">
@@ -498,6 +513,7 @@ hace directamente la función programada.<em>Ejemplo:</em></p>
 <p>También usamos <em>round</em> para redondear los decimales de la
 tabla final, el último número 4 es el número de decimales que
 queremos.</p>
+<div style="page-break-after: always;"></div>
 </div>
 <div id="método-promethee" class="section level2">
 <h2>Método Promethee</h2>
@@ -515,7 +531,7 @@ decimales.</p>
 <div id="funciones-de-clase" class="section level3">
 <h3>Funciones de clase</h3>
 <div id="introducción-de-datos" class="section level4">
-<h4>Introducción de datos**</h4>
+<h4>Introducción de datos</h4>
 <p>En este método se deben hacer distintas matrices, una primera que
 compare los distintos criterios entre sí.</p>
 <p><em>matriz criterios</em></p>
@@ -538,6 +554,7 @@ Criterio2 &lt;- multicriterio.crea.matrizvaloraciones_mej(c(1/2), numalternativa
 #matriz criterio 3
 Criterio3 &lt;- multicriterio.crea.matrizvaloraciones_mej(c(4), numalternativas = 2,
                                                   v.nombres.alternativas = c(&quot;A&quot;,&quot;B&quot;))</code></pre>
+<div style="page-break-after: always;"></div>
 </div>
 <div id="cálculo-pesos-locales" class="section level4">
 <h4>Cálculo pesos locales</h4>
@@ -565,7 +582,8 @@ PesosCriterio3 &lt;- multicriterio.metodoAHP.variante3.basico(Criterio3)</code><
 </div>
 <div id="cálculo-pesos-globales" class="section level4">
 <h4>Cálculo pesos globales</h4>
-<pre class="r"><code>PesosGlobales &lt;- multicriterio.metodoAHP.pesosglobales_entabla(PesosCriterios$valoraciones.ahp,
+<pre class="r"><code>PesosGlobales &lt;- multicriterio.metodoAHP.pesosglobales_entabla(
+  PesosCriterios$valoraciones.ahp,
                                                        rbind(PesosCriterio1$valoraciones.ahp,
                                                              PesosCriterio2$valoraciones.ahp,PesosCriterio3$valoraciones.ahp))</code></pre>
 <p>Nos quedaremos con aquella alternativa que muestre <strong><em>mayor
